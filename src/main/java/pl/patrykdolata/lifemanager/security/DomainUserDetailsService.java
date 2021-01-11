@@ -2,7 +2,6 @@ package pl.patrykdolata.lifemanager.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,7 +32,8 @@ public class DomainUserDetailsService implements UserDetailsService {
         return userOpt.map(this::createUser).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 
-    private User createUser(UserEntity user) {
-        return new User(user.getUsername(), user.getPassword(), Collections.emptyList());
+    private AuthenticatedUser createUser(UserEntity user) {
+        return new AuthenticatedUser(user.getId(), user.getUsername(), user.getPassword(), user.getActivated(),
+                Collections.emptyList());
     }
 }

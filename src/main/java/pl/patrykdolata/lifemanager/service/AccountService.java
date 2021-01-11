@@ -1,11 +1,7 @@
 package pl.patrykdolata.lifemanager.service;
 
-import pl.patrykdolata.lifemanager.model.JwtToken;
-import pl.patrykdolata.lifemanager.model.LoginInfo;
-import pl.patrykdolata.lifemanager.model.NewUser;
+import pl.patrykdolata.lifemanager.model.NewAccount;
 
 public interface AccountService {
-    JwtToken authorize(LoginInfo loginInfo);
-
-    void register(NewUser user);
+    Long create(NewAccount account);
 }

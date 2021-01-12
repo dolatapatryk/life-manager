@@ -4,7 +4,9 @@ import org.springframework.http.HttpStatus;
 
 public class PasswordsMatchException extends WebException {
 
+    public static final String MESSAGE = "Password and confirm password don't match";
+
     public PasswordsMatchException() {
-        super("Password and confirm password don't match", HttpStatus.UNPROCESSABLE_ENTITY);
+        super(MESSAGE, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 }

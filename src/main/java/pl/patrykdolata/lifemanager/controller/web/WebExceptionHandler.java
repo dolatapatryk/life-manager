@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import pl.patrykdolata.lifemanager.exceptions.WebException;
 import pl.patrykdolata.lifemanager.model.ErrorResponse;
+import pl.patrykdolata.lifemanager.util.ResponseUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -17,13 +18,13 @@ public class WebExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public final ResponseEntity<ErrorResponse> handleAuthenticationExceptions(Exception ex, HttpServletRequest request) {
-        return new ResponseEntity<>(createErrorResponse(ex, HttpStatus.UNAUTHORIZED.value(), request),
+        return ResponseUtils.response(createErrorResponse(ex, HttpStatus.UNAUTHORIZED.value(), request),
                 HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(WebException.class)
     public final ResponseEntity<ErrorResponse> handleWebExceptions(WebException ex, HttpServletRequest request) {
-        return new ResponseEntity<>(createErrorResponse(ex, ex.getStatusCode().value(), request),
+        return ResponseUtils.response(createErrorResponse(ex, ex.getStatusCode().value(), request),
                 ex.getStatusCode());
     }
 

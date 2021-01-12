@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.patrykdolata.lifemanager.model.IdResponse;
 import pl.patrykdolata.lifemanager.model.NewAccount;
 import pl.patrykdolata.lifemanager.service.AccountService;
+import pl.patrykdolata.lifemanager.util.ResponseUtils;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -29,6 +30,6 @@ public class AccountController {
         log.debug("Request to add new account: {}", account.getName());
         Long newAccountId = accountService.create(account);
 
-        return new ResponseEntity<>(new IdResponse(newAccountId), HttpStatus.CREATED);
+        return ResponseUtils.response(new IdResponse(newAccountId), HttpStatus.CREATED);
     }
 }

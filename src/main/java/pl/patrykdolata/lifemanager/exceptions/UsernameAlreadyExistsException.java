@@ -4,7 +4,9 @@ import org.springframework.http.HttpStatus;
 
 public class UsernameAlreadyExistsException extends WebException {
 
+    public static final String MESSAGE = "Password and confirm password don't match";
+
     public UsernameAlreadyExistsException() {
-        super("Username is already in use", HttpStatus.CONFLICT);
+        super(MESSAGE, HttpStatus.CONFLICT);
     }
 }

@@ -14,6 +14,7 @@ import pl.patrykdolata.lifemanager.model.LoginInfo;
 import pl.patrykdolata.lifemanager.model.NewUser;
 import pl.patrykdolata.lifemanager.security.JwtFilter;
 import pl.patrykdolata.lifemanager.service.UserService;
+import pl.patrykdolata.lifemanager.util.ResponseUtils;
 
 @RestController
 @RequestMapping("/api/users")
@@ -34,7 +35,7 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getToken());
 
-        return new ResponseEntity<>(token, headers, HttpStatus.OK);
+        return ResponseUtils.ok(token, headers);
     }
 
     @PostMapping("/register")
@@ -42,6 +43,6 @@ public class UserController {
         log.debug("Request to register new user: {}", user.getUsername());
         userService.register(user);
 
-        return ResponseEntity.ok().build();
+        return ResponseUtils.ok();
     }
 }

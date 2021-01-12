@@ -8,6 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pl.patrykdolata.lifemanager.domain.UserEntity;
+import pl.patrykdolata.lifemanager.exceptions.EmailAlreadyExistsException;
+import pl.patrykdolata.lifemanager.exceptions.PasswordsMatchException;
+import pl.patrykdolata.lifemanager.exceptions.UsernameAlreadyExistsException;
 import pl.patrykdolata.lifemanager.mapper.UserMapper;
 import pl.patrykdolata.lifemanager.model.JwtToken;
 import pl.patrykdolata.lifemanager.model.LoginInfo;
@@ -15,6 +18,8 @@ import pl.patrykdolata.lifemanager.model.NewUser;
 import pl.patrykdolata.lifemanager.repository.UserRepository;
 import pl.patrykdolata.lifemanager.security.JwtTokenProvider;
 import pl.patrykdolata.lifemanager.service.UserService;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -55,6 +60,28 @@ public class UserServiceImpl implements UserService {
     }
 
     private void validNewUser(NewUser user) {
+        if (!checkPasswordsMatch(user.getPassword(), user.getConfirmPassword())) {
+            throw new PasswordsMatchException();
+        }
+        if (checkUserWithEmailExists(user.getEmail())) {
+            throw new EmailAlreadyExistsException();
+        }
+        if (checkUserWithUsernameExists(user.getUsername())) {
+            throw new UsernameAlreadyExistsException();
+        }
+    }
 
+    private boolean checkPasswordsMatch(String password, String confirmPassword) {
+        return password.equals(confirmPassword);
+    }
+
+    private boolean checkUserWithEmailExists(String email) {
+        Optional<UserEntity> user = userRepository.findOneByEmail(email);
+        return user.isPresent();
+    }
+
+    private boolean checkUserWithUsernameExists(String username) {
+        Optional<UserEntity> user = userRepository.findOneByUsername(username);
+        return user.isPresent();
     }
 }

@@ -15,7 +15,8 @@ public class AuthenticatedUser extends User {
 
     public AuthenticatedUser(Long id, String username, String password, boolean activated,
                              Collection<GrantedAuthority> authorities) {
-        super(username, password, activated, true, true, true, authorities);
+        super(username, password, activated, true, true, true,
+                authorities);
         this.id = id;
     }
 }

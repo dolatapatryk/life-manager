@@ -26,4 +26,4 @@ jobs:
     - name: Package
       run: ./mvnw package -DskipTests --file pom.xml
     - name: CodeCov
-      run: bash <(curl -s https://codecov.io/bash)
+      run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}

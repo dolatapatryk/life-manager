@@ -49,13 +49,13 @@ class UserServiceTest {
     private AuthenticationManager authenticationManager;
 
     @Test
-    public void register_whenPasswordsDontMatch_expectException() {
+    void register_whenPasswordsDontMatch_expectException() {
         NewUser newUser = createNewUser("pass1");
         assertThrows(PasswordsMatchException.class, () -> userService.register(newUser));
     }
 
     @Test
-    public void register_whenEmailExists_expectException() {
+    void register_whenEmailExists_expectException() {
         NewUser newUser = createNewUser();
         when(userRepository.findOneByEmail(newUser.getEmail()))
                 .thenReturn(Optional.of(new UserEntity()));
@@ -63,7 +63,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void register_whenUsernameExists_expectException() {
+    void register_whenUsernameExists_expectException() {
         NewUser newUser = createNewUser();
         when(userRepository.findOneByUsername(newUser.getUsername()))
                 .thenReturn(Optional.of(new UserEntity()));
@@ -71,7 +71,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void register_whenProperNewUserData_expectSavedEntity() {
+    void register_whenProperNewUserData_expectSavedEntity() {
         NewUser newUser = createNewUser();
         when(userRepository.findOneByEmail(newUser.getEmail())).thenReturn(Optional.empty());
         when(userRepository.findOneByUsername(newUser.getUsername())).thenReturn(Optional.empty());
@@ -91,26 +91,27 @@ class UserServiceTest {
     }
 
     @Test
-    public void authorize_whenBadCredentials_expectException() {
+    void authorize_whenBadCredentials_expectException() {
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenThrow(BadCredentialsException.class);
-        assertThrows(BadCredentialsException.class, () -> userService.authorize(createLoginInfo(true)));
+        LoginInfo loginInfo = createLoginInfo(true);
+        assertThrows(BadCredentialsException.class, () -> userService.authorize(loginInfo));
     }
 
     @Test
-    public void authorize_whenProperCredentialsNullRememberMe_expectProperToken() {
+    void authorize_whenProperCredentialsNullRememberMe_expectProperToken() {
         authorize_whenProperCredentials_expectProperToken(null);
         verify(tokenProvider).createToken(any(Authentication.class), eq(false));
     }
 
     @Test
-    public void authorize_whenProperCredentialsFalseRememberMe_expectProperToken() {
+    void authorize_whenProperCredentialsFalseRememberMe_expectProperToken() {
         authorize_whenProperCredentials_expectProperToken(false);
         verify(tokenProvider).createToken(any(Authentication.class), eq(false));
     }
 
     @Test
-    public void authorize_whenProperCredentialsTrueRememberMe_expectProperToken() {
+    void authorize_whenProperCredentialsTrueRememberMe_expectProperToken() {
         authorize_whenProperCredentials_expectProperToken(true);
         verify(tokenProvider).createToken(any(Authentication.class), eq(true));
     }

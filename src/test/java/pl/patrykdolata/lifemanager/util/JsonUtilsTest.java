@@ -12,7 +12,7 @@ class JsonUtilsTest {
     private static class ClassThatJacksonCannotSerialize {}
 
     @Test
-    public void asJsonString_whenObjNull_expectNullText() {
+    void asJsonString_whenObjNull_expectNullText() {
         Object obj = null;
         String result = JsonUtils.asJsonString(obj);
 
@@ -20,7 +20,7 @@ class JsonUtilsTest {
     }
 
     @Test
-    public void asJsonString_whenInvalidObject_expectNull() {
+    void asJsonString_whenInvalidObject_expectNull() {
         Object obj = new ClassThatJacksonCannotSerialize();
         String result = JsonUtils.asJsonString(obj);
 
@@ -28,7 +28,7 @@ class JsonUtilsTest {
     }
 
     @Test
-    public void asJsonString_whenProperObject_expectProperString() {
+    void asJsonString_whenProperObject_expectProperString() {
         Object obj = new IdResponse(1L);
         String result = JsonUtils.asJsonString(obj);
 

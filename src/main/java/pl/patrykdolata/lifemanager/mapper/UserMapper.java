@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.patrykdolata.lifemanager.domain.UserEntity;
 import pl.patrykdolata.lifemanager.model.NewUser;
-import pl.patrykdolata.lifemanager.security.AuthenticationUtils;
 
 import java.util.Date;
-import java.util.Optional;
 
 @Mapper(componentModel = "spring", imports = {RandomStringUtils.class, Date.class})
 public abstract class UserMapper {

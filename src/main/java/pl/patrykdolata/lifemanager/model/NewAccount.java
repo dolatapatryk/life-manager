@@ -1,10 +1,11 @@
 package pl.patrykdolata.lifemanager.model;
 
 import lombok.Data;
+import lombok.Value;
 
 import java.math.BigDecimal;
 
-@Data
+@Value
 public class NewAccount {
     String name;
     BigDecimal startBalance;

@@ -13,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -28,6 +27,7 @@ public class JwtTokenProvider {
 
     private final Logger log = LoggerFactory.getLogger(JwtTokenProvider.class);
     private static final String AUTHORITIES_KEY = "auth";
+    private static final String ID_KEY = "id";
 
     private Key key;
 
@@ -53,6 +53,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, getAuthorities(authentication))
+                .claim(ID_KEY, getId(authentication))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
                 .compact();
@@ -60,8 +61,9 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = getTokenClaims(token);
-        Collection<? extends GrantedAuthority> authorities = getAuthorities(claims);
-        User principal = new User(claims.getSubject(), "", authorities);
+        Collection<GrantedAuthority> authorities = getAuthorities(claims);
+        Long id = getId(claims);
+        AuthenticatedUser principal = new AuthenticatedUser(id, claims.getSubject(), "", true, authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
@@ -74,6 +76,10 @@ public class JwtTokenProvider {
                 .getBody();
     }
 
+    private Long getId(Authentication authentication) {
+        return ((AuthenticatedUser) authentication.getPrincipal()).getId();
+    }
+
     private String getAuthorities(Authentication authentication) {
 //        return authentication.getAuthorities().stream()
 //                .map(GrantedAuthority::getAuthority)
@@ -81,10 +87,14 @@ public class JwtTokenProvider {
         return "ROLE_USER";
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(Claims claims) {
+    private Collection<GrantedAuthority> getAuthorities(Claims claims) {
         return Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
+    }
+
+    private Long getId(Claims claims) {
+        return Long.valueOf(claims.get(ID_KEY).toString());
     }
 
     public boolean validateToken(String token) {

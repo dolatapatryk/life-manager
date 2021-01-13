@@ -25,3 +25,5 @@ jobs:
       run: ./mvnw -Ptest test -B
     - name: Package
       run: ./mvnw package -DskipTests --file pom.xml
+    - name: CodeCov
+      run: bash <(curl -s https://codecov.io/bash)

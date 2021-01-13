@@ -1,1 +1,2 @@
 language: java
+script: ./mvnw clean && ./mvnw -Dmaven.test.skip=true validate compile && ./mvnw -Ptest test -B && ./mvnw package -DskipTests

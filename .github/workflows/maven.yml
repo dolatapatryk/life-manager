@@ -1,4 +1,4 @@
-name: LifeManager CI
+name: build
 
 on:
   push:

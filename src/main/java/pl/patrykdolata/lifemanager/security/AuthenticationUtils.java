@@ -11,7 +11,7 @@ public class AuthenticationUtils {
 
     public Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getPrincipal() instanceof AuthenticatedUser) {
+        if (authentication != null && authentication.getPrincipal() instanceof AuthenticatedUser) {
             AuthenticatedUser principal = (AuthenticatedUser) authentication.getPrincipal();
             return principal.getId();
         }

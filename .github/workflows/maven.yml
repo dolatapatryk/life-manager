@@ -17,5 +17,11 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Build with Maven
-      run: ./mvnw clean && ./mvnw -Dmaven.test.skip=true validate compile && ./mvnw -Ptest test -B && ./mvnw package -DskipTests --file pom.xml
+    - name: Clean
+      run: ./mvnw clean
+    - name: Compile
+      run: ./mvnw -Dmaven.test.skip=true validate compile
+    - name: Test
+      run: ./mvnw -Ptest test -B
+    - name: Package
+      run: ./mvnw package -DskipTests --file pom.xml

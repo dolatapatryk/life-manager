@@ -25,7 +25,7 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String login) {
         log.debug("Authentication: {}", login);
         // todo sprawdzic czy to email czy username
         Optional<UserEntity> userOpt = userRepository.findOneByUsername(login);

@@ -45,7 +45,7 @@ class UserControllerTest {
     private final LoginInfo loginInfo = new LoginInfo("user", "pass", false);
 
     @Test
-    public void register_whenPasswordsDontMatch_expect422() throws Exception {
+    void register_whenPasswordsDontMatch_expect422() throws Exception {
         doThrow(new PasswordsMatchException()).when(userService).register(any(NewUser.class));
 
         mockMvc.perform(post(URL_REGISTER)
@@ -59,7 +59,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void register_whenEmailExists_expect409() throws Exception {
+    void register_whenEmailExists_expect409() throws Exception {
         doThrow(new EmailAlreadyExistsException()).when(userService).register(any(NewUser.class));
 
         mockMvc.perform(post(URL_REGISTER)
@@ -73,7 +73,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void register_whenUsernameExists_expect409() throws Exception {
+    void register_whenUsernameExists_expect409() throws Exception {
         doThrow(new UsernameAlreadyExistsException()).when(userService).register(any(NewUser.class));
 
         mockMvc.perform(post(URL_REGISTER)
@@ -87,7 +87,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void register_whenEverythingIsOk_expect200() throws Exception {
+    void register_whenEverythingIsOk_expect200() throws Exception {
         mockMvc.perform(post(URL_REGISTER)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtils.asJsonString(newUser)))
@@ -95,7 +95,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void authorize_whenAuthenticationException_expect401() throws Exception {
+    void authorize_whenAuthenticationException_expect401() throws Exception {
         when(userService.authorize(any(LoginInfo.class))).thenThrow(new BadCredentialsException("Bad credentials"));
 
         mockMvc.perform(post(URL_AUTHENTICATE)
@@ -109,7 +109,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void authorize_whenEverythingIsOk_expect200() throws Exception {
+    void authorize_whenEverythingIsOk_expect200() throws Exception {
         when(userService.authorize(any(LoginInfo.class))).thenReturn(new JwtToken("some_token"));
         mockMvc.perform(post(URL_AUTHENTICATE)
                 .contentType(MediaType.APPLICATION_JSON)

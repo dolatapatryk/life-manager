@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class UserMapperTest {
+class UserMapperTest {
 
     @Autowired
     private UserMapper mapper;
@@ -23,7 +23,7 @@ public class UserMapperTest {
     private PasswordEncoder passwordEncoder;
 
     @Test
-    public void mapPassword_whenEmptyPassword_expectRandomString() {
+    void mapPassword_whenEmptyPassword_expectRandomString() {
         String password = "";
         String result = mapper.mapPassword(password);
 
@@ -31,7 +31,7 @@ public class UserMapperTest {
     }
 
     @Test
-    public void mapPassword_whenNullPassword_expectRandomString() {
+    void mapPassword_whenNullPassword_expectRandomString() {
         String password = null;
         String result = mapper.mapPassword(password);
 
@@ -39,7 +39,7 @@ public class UserMapperTest {
     }
 
     @Test
-    public void mapPassword_whenSpecificPassword_expectProperString() {
+    void mapPassword_whenSpecificPassword_expectProperString() {
         String password = "test_password";
         String result = mapper.mapPassword(password);
 
@@ -53,7 +53,7 @@ public class UserMapperTest {
     }
 
     @Test
-    public void toEntity_whenNullModel_expectNull() {
+    void toEntity_whenNullModel_expectNull() {
         NewUser user = null;
         UserEntity result = mapper.toEntity(user);
 
@@ -61,7 +61,7 @@ public class UserMapperTest {
     }
 
     @Test
-    public void toEntity_whenProperModel_expectProperEntity() {
+    void toEntity_whenProperModel_expectProperEntity() {
         NewUser user = new NewUser("username", "pass", "pass", "test@test.com",
                 "John", "Doe");
         UserEntity result = mapper.toEntity(user);

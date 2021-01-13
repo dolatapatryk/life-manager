@@ -22,7 +22,7 @@ jobs:
     - name: Compile
       run: ./mvnw -Dmaven.test.skip=true validate compile
     - name: Test
-      run: ./mvnw -Ptest test -B
+      run: ./mvnw -Ptest test -B jacoco:report
     - name: Package
       run: ./mvnw package -DskipTests --file pom.xml
     - name: CodeCov

@@ -3,6 +3,7 @@ package pl.patrykdolata.lifemanager.controller
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -21,7 +22,7 @@ class UserController(private val userService: UserService) {
 
     private val log: Logger = LoggerFactory.getLogger(UserController::class.java)
 
-    @PostMapping("/authenticate")
+    @PostMapping("/authenticate", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun authorize(@RequestBody loginInfo: LoginInfo): ResponseEntity<JwtToken> {
         log.debug("Request to authorize user: {}", loginInfo.username)
         val token: JwtToken = userService.authorize(loginInfo)

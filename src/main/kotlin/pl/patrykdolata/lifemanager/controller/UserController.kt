@@ -22,9 +22,9 @@ class UserController(private val userService: UserService) {
 
     private val log: Logger = LoggerFactory.getLogger(UserController::class.java)
 
-    @PostMapping("/authenticate", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping("/authenticate")
     fun authorize(@RequestBody loginInfo: LoginInfo): ResponseEntity<JwtToken> {
-        log.debug("Request to authorize user: {}", loginInfo.username)
+        log.debug("Request to authorize user: ${loginInfo.username}")
         val token: JwtToken = userService.authorize(loginInfo)
         val headers = HttpHeaders()
         headers.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.token)

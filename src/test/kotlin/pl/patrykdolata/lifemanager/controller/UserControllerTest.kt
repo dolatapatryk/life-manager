@@ -99,7 +99,6 @@ class UserControllerTest {
     }
 
     @Test
-    @Disabled
     @Throws(Exception::class)
     fun `Authorize with bad credentials should return 401`() {
         whenever(userService.authorize(any())).thenThrow(BadCredentialsException("Bad credentials"))

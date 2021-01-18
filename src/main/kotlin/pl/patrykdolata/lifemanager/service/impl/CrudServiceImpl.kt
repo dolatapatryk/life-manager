@@ -6,11 +6,14 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.domain.Specification
 import pl.patrykdolata.lifemanager.aop.annotation.FilterByUser
+import pl.patrykdolata.lifemanager.domain.AbstractEntity
 import pl.patrykdolata.lifemanager.mapper.EntityMapper
 import pl.patrykdolata.lifemanager.repository.CrudSpecificationRepository
 import pl.patrykdolata.lifemanager.service.CrudService
+import java.io.Serializable
+import javax.persistence.EntityNotFoundException
 
-abstract class CrudServiceImpl<M, E, ID>(
+abstract class CrudServiceImpl<M, E : AbstractEntity<ID>, ID : Serializable>(
         private val repository: CrudSpecificationRepository<E, ID>,
         private val mapper: EntityMapper<M, E>
 ) : CrudService<M, E, ID> {
@@ -37,20 +40,41 @@ abstract class CrudServiceImpl<M, E, ID>(
 
     @FilterByUser
     override fun findOne(id: ID): M {
-        TODO("Not yet implemented")
+        getLogger().debug("Find ${getModelClassName()} by id: $id")
+        val entity = repository.findOneById(id)
+
+        return if (entity != null) mapper.toModel(entity) else
+            throw EntityNotFoundException(getExceptionMessage(id))
     }
 
     override fun create(model: M): ID {
-        TODO("Not yet implemented")
+        getLogger().debug("Create new ${getModelClassName()}")
+        val newEntity: E = repository.save(mapper.toEntity(model))
+
+        return newEntity.id!!
     }
 
     @FilterByUser
     override fun update(id: ID, model: M) {
-        TODO("Not yet implemented")
+        getLogger().debug("Update ${getModelClassName()} with id: $id")
+        val existing = repository.findOneById(id)
+        if (existing != null) {
+            TODO()
+        } else {
+            throw EntityNotFoundException(getExceptionMessage(id))
+        }
     }
 
     @FilterByUser
     override fun delete(id: ID) {
-        TODO("Not yet implemented")
+        getLogger().debug("Delete ${getModelClassName()} with id: $id")
+        val existing = repository.findOneById(id)
+        if (existing != null) {
+            repository.delete(existing)
+        } else {
+            throw EntityNotFoundException(getExceptionMessage(id))
+        }
     }
+
+    private fun getExceptionMessage(id: ID): String = "${getModelClassName()} with id: $id not found"
 }

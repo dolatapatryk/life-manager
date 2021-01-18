@@ -26,7 +26,8 @@ abstract class UserMapper {
             Mapping(target = "password", source = "password", qualifiedByName = ["mapPassword"]),
             Mapping(target = "activated", constant = "false"),
             Mapping(target = "activationKey", expression = "java(RandomStringUtils.randomNumeric(KEY_LENGTH))"),
-            Mapping(target = "createdAt", expression = "java(new Date().getTime())")
+            Mapping(target = "createdAt", expression = "java(new Date().getTime())"),
+            Mapping(target = "resetKey", ignore = true)
     )
     abstract fun toEntity(newUser: NewUser): UserEntity
 

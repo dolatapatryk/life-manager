@@ -1,4 +1,18 @@
 language: java
-script: ./mvnw clean && ./mvnw -Dmaven.test.skip=true validate compile && ./mvnw -Ptest test -B jacoco:report && ./mvnw package -DskipTests --file pom.xml
+os: linux
+jobs:
+  include:
+    - stage: "Clean"
+      name: "Clean"
+      script: ./mvnw clean
+    - stage: "Compile"
+      name: "Compile"
+      script: ./mvnw -Dmaven.test.skip=true validate compile
+    - stage: "Test"
+      name: "Test"
+      script: ./mvnw -Ptest test -B jacoco:report
+    - stage: "Package"
+      name: "Package"
+      script: ./mvnw package -DskipTests --file pom.xml
 after_success:
   - bash <(curl -s https://codecov.io/bash)

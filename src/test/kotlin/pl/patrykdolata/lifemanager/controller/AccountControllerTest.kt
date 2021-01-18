@@ -5,7 +5,6 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -15,7 +14,7 @@ import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import pl.patrykdolata.lifemanager.model.NewAccount
+import pl.patrykdolata.lifemanager.model.Account
 import pl.patrykdolata.lifemanager.service.AccountService
 import pl.patrykdolata.lifemanager.util.JsonUtils.asJsonString
 import java.math.BigDecimal
@@ -36,7 +35,7 @@ class AccountControllerTest {
     @MockBean
     private lateinit var accountService: AccountService
 
-    private val newAccount = NewAccount(NAME, BigDecimal(12.5))
+    private val newAccount = Account(NAME, BigDecimal(12.5))
 
     @Test
     @WithMockUser(username = "user", password = "pass")

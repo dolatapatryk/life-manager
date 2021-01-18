@@ -6,17 +6,15 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.boot.test.mock.mockito.SpyBean
 import pl.patrykdolata.lifemanager.domain.AccountEntity
 import pl.patrykdolata.lifemanager.domain.UserEntity
 import pl.patrykdolata.lifemanager.mapper.AccountMapper
-import pl.patrykdolata.lifemanager.model.NewAccount
+import pl.patrykdolata.lifemanager.model.Account
 import pl.patrykdolata.lifemanager.repository.AccountRepository
 import java.math.BigDecimal
 
@@ -36,12 +34,12 @@ class AccountServiceTest {
     @MockBean
     private lateinit var accountRepository: AccountRepository
 
-    private lateinit var newAccount: NewAccount
+    private lateinit var newAccount: Account
     private lateinit var accountEntity: AccountEntity
 
     @BeforeEach
     fun init() {
-        newAccount = NewAccount("acc1", BigDecimal(12.5))
+        newAccount = Account("acc1", BigDecimal(12.5))
         accountEntity = AccountEntity(UserEntity())
         accountEntity.id = ID
     }

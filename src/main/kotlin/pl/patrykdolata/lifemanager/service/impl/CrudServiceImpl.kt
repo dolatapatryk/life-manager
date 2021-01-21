@@ -58,22 +58,20 @@ abstract class CrudServiceImpl<M, E : AbstractEntity<ID>, ID : Serializable>(
     override fun update(id: ID, model: M) {
         getLogger().debug("Update ${getModelClassName()} with id: $id")
         val existing = repository.findOneById(id)
-        if (existing != null) {
-            TODO()
-        } else {
-            throw EntityNotFoundException(getExceptionMessage(id))
-        }
+        if (existing != null) updateEntity(id, model) else throw EntityNotFoundException(getExceptionMessage(id))
     }
 
     @FilterByUser
     override fun delete(id: ID) {
         getLogger().debug("Delete ${getModelClassName()} with id: $id")
         val existing = repository.findOneById(id)
-        if (existing != null) {
-            repository.delete(existing)
-        } else {
-            throw EntityNotFoundException(getExceptionMessage(id))
-        }
+        if (existing != null) repository.deleteById(id) else throw EntityNotFoundException(getExceptionMessage(id))
+    }
+
+    private fun updateEntity(id: ID, model: M) {
+        val toUpdate = mapper.toEntity(model)
+        toUpdate.id = id
+        repository.save(toUpdate)
     }
 
     private fun getExceptionMessage(id: ID): String = "${getModelClassName()} with id: $id not found"

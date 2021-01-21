@@ -9,6 +9,7 @@ import pl.patrykdolata.lifemanager.util.RequestUtils.createSort
 import pl.patrykdolata.lifemanager.util.RequestUtils.createSortedPageable
 import pl.patrykdolata.lifemanager.util.RequestUtils.createSpecification
 import pl.patrykdolata.lifemanager.util.ResponseUtils.createdResponse
+import pl.patrykdolata.lifemanager.util.ResponseUtils.ok
 import pl.patrykdolata.lifemanager.util.ResponseUtils.pageResponse
 import pl.patrykdolata.lifemanager.util.ResponseUtils.response
 
@@ -36,9 +37,7 @@ abstract class AbstractCrudController<M, E, ID>(private val service: CrudService
     }
 
     @GetMapping("/{id}")
-    fun findOne(
-            @PathVariable(name = "id", required = true) id: ID
-    ): ResponseEntity<M> {
+    fun findOne(@PathVariable(name = "id", required = true) id: ID): ResponseEntity<M> {
         getLogger().debug("Request to get user's ${getModelClassName()} by id: $id")
         val model: M = service.findOne(id)
 
@@ -51,5 +50,21 @@ abstract class AbstractCrudController<M, E, ID>(private val service: CrudService
         val newId = service.create(model)
 
         return createdResponse(IdResponse(newId))
+    }
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable(name = "id", required = true) id: ID, @RequestBody updatedModel: M): ResponseEntity<Void> {
+        getLogger().debug("Reques to update user's ${getModelClassName()} with id: $id")
+        service.update(id, updatedModel)
+
+        return ok()
+    }
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable(name = "id", required = true) id: ID): ResponseEntity<Void> {
+        getLogger().debug("Request to delete user's ${getModelClassName()} by id: $id")
+        service.delete(id)
+
+        return ok()
     }
 }

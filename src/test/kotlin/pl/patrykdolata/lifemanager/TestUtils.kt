@@ -2,6 +2,7 @@ package pl.patrykdolata.lifemanager
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import pl.patrykdolata.lifemanager.security.AuthenticatedUser
 
@@ -9,7 +10,8 @@ object TestUtils {
     const val ID = 3L
 
     fun withProperPrincipal() {
-        val principal = AuthenticatedUser(ID, "user", "pass", true, emptyList())
+        val principal = AuthenticatedUser(ID, "user", "pass", "test@test.com", "john",
+                "doe", true, listOf(SimpleGrantedAuthority("USER")));
         SecurityContextHolder.getContext().authentication = getAuthentication(principal)
     }
 

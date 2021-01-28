@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import pl.patrykdolata.lifemanager.domain.UserEntity
 import pl.patrykdolata.lifemanager.exceptions.EmailAlreadyExistsException
@@ -123,8 +124,8 @@ class UserServiceTest {
     }
 
     private fun getAuthUser(loginInfo: LoginInfo): AuthenticatedUser {
-        return AuthenticatedUser(1L, loginInfo.username, loginInfo.password,
-                true, emptyList())
+        return AuthenticatedUser(1L, loginInfo.username, loginInfo.password, "test@test.com", "john",
+                "doe", true, listOf(SimpleGrantedAuthority("USER")))
     }
 
     private fun getAuth(authUser: AuthenticatedUser, password: String): UsernamePasswordAuthenticationToken {

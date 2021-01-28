@@ -12,10 +12,11 @@ import pl.patrykdolata.lifemanager.exceptions.EmailAlreadyExistsException
 import pl.patrykdolata.lifemanager.exceptions.PasswordMatchException
 import pl.patrykdolata.lifemanager.exceptions.UsernameAlreadyExistsException
 import pl.patrykdolata.lifemanager.mapper.UserMapper
-import pl.patrykdolata.lifemanager.model.JwtToken
 import pl.patrykdolata.lifemanager.model.LoginInfo
 import pl.patrykdolata.lifemanager.model.NewUser
+import pl.patrykdolata.lifemanager.model.User
 import pl.patrykdolata.lifemanager.repository.UserRepository
+import pl.patrykdolata.lifemanager.security.AuthenticatedUser
 import pl.patrykdolata.lifemanager.security.JwtTokenProvider
 import pl.patrykdolata.lifemanager.service.UserService
 
@@ -27,14 +28,15 @@ class UserServiceImpl(
 
     private val log: Logger = LoggerFactory.getLogger(UserServiceImpl::class.java)
 
-    override fun authorize(loginInfo: LoginInfo): JwtToken {
+    override fun authorize(loginInfo: LoginInfo): User {
         log.debug("Authorize user: ${loginInfo.username}")
         val token = UsernamePasswordAuthenticationToken(loginInfo.username, loginInfo.password)
         val authentication: Authentication = authenticationManager.authenticate(token)
         SecurityContextHolder.getContext().authentication = authentication
         val jwt = tokenProvider.createToken(authentication, loginInfo.rememberMe)
+        val user: AuthenticatedUser = authentication.principal as AuthenticatedUser
 
-        return JwtToken(jwt)
+        return User(user.id, user.username, user.email, user.firstName, user.lastName, jwt)
     }
 
     override fun register(user: NewUser) {

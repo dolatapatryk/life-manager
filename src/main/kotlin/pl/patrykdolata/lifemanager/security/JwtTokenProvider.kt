@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Component
 import java.security.Key
 import java.util.*
@@ -31,8 +29,7 @@ class JwtTokenProvider(
 ) {
 
     companion object {
-        private const val AUTHORITIES_KEY = "auth"
-        private const val ID_KEY = "id"
+        private const val USER_KEY = "user"
     }
 
     private val log: Logger = LoggerFactory.getLogger(JwtTokenProvider::class.java)
@@ -51,8 +48,7 @@ class JwtTokenProvider(
             Date(now + tokenExpirationTime)
         return Jwts.builder()
                 .setSubject(authentication.name)
-                .claim(AUTHORITIES_KEY, getAuthorities(authentication))
-                .claim(ID_KEY, getId(authentication))
+                .claim(USER_KEY, getUser(authentication))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
                 .compact()
@@ -60,11 +56,9 @@ class JwtTokenProvider(
 
     fun getAuthentication(token: String): Authentication {
         val claims: Claims = getTokenClaims(token)
-        val authorities = getAuthorities(claims)
-        val id: Long = getId(claims)
-        val principal = AuthenticatedUser(id, claims.subject, "", true, authorities)
+        val principal: AuthenticatedUser = getUser(claims)
 
-        return UsernamePasswordAuthenticationToken(principal, token, authorities)
+        return UsernamePasswordAuthenticationToken(principal, token, principal.authorities)
     }
 
     fun validateToken(token: String): Boolean {
@@ -87,17 +81,7 @@ class JwtTokenProvider(
                 .body
     }
 
-    private fun getId(authentication: Authentication): Long = (authentication.principal as AuthenticatedUser).id
+    private fun getUser(authentication: Authentication): AuthenticatedUser = (authentication.principal as AuthenticatedUser)
 
-    private fun getAuthorities(authentication: Authentication): String {
-//        return authentication.authorities.map { it.authority }
-//                .toCollection(Collectors.joining(","))
-        return "ROLE_USER"
-    }
-
-    private fun getAuthorities(claims: Claims): Collection<GrantedAuthority> {
-        return claims[AUTHORITIES_KEY].toString().split(",").map { SimpleGrantedAuthority(it) }
-    }
-
-    private fun getId(claims: Claims): Long = claims[ID_KEY].toString().toLong()
+    private fun getUser(claims: Claims): AuthenticatedUser = claims.get(USER_KEY, AuthenticatedUser::class.java)
 }

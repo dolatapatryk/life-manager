@@ -1,9 +1,7 @@
 package pl.patrykdolata.lifemanager.domain
 
 import pl.patrykdolata.lifemanager.domain.UserEntity.Companion.TABLE_NAME
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Table
+import javax.persistence.*
 import javax.validation.constraints.Email
 import javax.validation.constraints.Size
 
@@ -49,4 +47,12 @@ class UserEntity : AbstractEntity<Long>() {
 
     @Column(name = "created_at")
     var createdAt: Long = 0
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_authority",
+            joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
+            inverseJoinColumns = [JoinColumn(name = "authority", referencedColumnName = "name")]
+    )
+    var authorities: Set<AuthorityEntity> = emptySet()
 }

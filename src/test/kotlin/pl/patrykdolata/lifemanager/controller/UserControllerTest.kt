@@ -4,7 +4,6 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.whenever
 import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -20,9 +19,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import pl.patrykdolata.lifemanager.exceptions.EmailAlreadyExistsException
 import pl.patrykdolata.lifemanager.exceptions.PasswordMatchException
 import pl.patrykdolata.lifemanager.exceptions.UsernameAlreadyExistsException
-import pl.patrykdolata.lifemanager.model.JwtToken
 import pl.patrykdolata.lifemanager.model.LoginInfo
 import pl.patrykdolata.lifemanager.model.NewUser
+import pl.patrykdolata.lifemanager.model.User
 import pl.patrykdolata.lifemanager.security.JwtFilter
 import pl.patrykdolata.lifemanager.service.UserService
 import pl.patrykdolata.lifemanager.util.JsonUtils.asJsonString
@@ -46,6 +45,8 @@ class UserControllerTest {
     private val newUser: NewUser = NewUser("user", "pass", "pass",
             "test@test.com", "John", "Doe")
     private val loginInfo: LoginInfo = LoginInfo("user", "pass", false)
+    private val user: User = User(1L, "user", "test@test.com", "John", "Doe",
+            "some_token")
 
     @Test
     @Throws(Exception::class)
@@ -116,7 +117,7 @@ class UserControllerTest {
     @Test
     @Throws(Exception::class)
     fun `Authorize with proper credentials should return status 200 and token`() {
-        whenever(userService.authorize(any())).thenReturn(JwtToken("some_token"))
+        whenever(userService.authorize(any())).thenReturn(user)
         mockMvc.perform(post(URL_AUTHENTICATE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(loginInfo)!!))

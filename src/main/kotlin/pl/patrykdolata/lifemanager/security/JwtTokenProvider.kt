@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Component
 import java.security.Key
 import java.util.*
@@ -29,7 +31,8 @@ class JwtTokenProvider(
 ) {
 
     companion object {
-        private const val USER_KEY = "user"
+        private const val AUTHORITIES_KEY = "auth"
+        private const val ID_KEY = "id"
     }
 
     private val log: Logger = LoggerFactory.getLogger(JwtTokenProvider::class.java)
@@ -48,7 +51,8 @@ class JwtTokenProvider(
             Date(now + tokenExpirationTime)
         return Jwts.builder()
                 .setSubject(authentication.name)
-                .claim(USER_KEY, getUser(authentication))
+                .claim(AUTHORITIES_KEY, getAuthorities(authentication))
+                .claim(ID_KEY, getId(authentication))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
                 .compact()
@@ -56,9 +60,11 @@ class JwtTokenProvider(
 
     fun getAuthentication(token: String): Authentication {
         val claims: Claims = getTokenClaims(token)
-        val principal: AuthenticatedUser = getUser(claims)
+        val authorities = getAuthorities(claims)
+        val id: Long = getId(claims)
+        val principal = AuthenticatedUser(id, claims.subject)
 
-        return UsernamePasswordAuthenticationToken(principal, token, principal.authorities)
+        return UsernamePasswordAuthenticationToken(principal, token, authorities)
     }
 
     fun validateToken(token: String): Boolean {
@@ -81,7 +87,13 @@ class JwtTokenProvider(
                 .body
     }
 
-    private fun getUser(authentication: Authentication): AuthenticatedUser = (authentication.principal as AuthenticatedUser)
+    private fun getId(authentication: Authentication): Long = (authentication.principal as AuthenticatedUser).id
 
-    private fun getUser(claims: Claims): AuthenticatedUser = claims.get(USER_KEY, AuthenticatedUser::class.java)
+    private fun getAuthorities(authentication: Authentication) = authentication.authorities.joinToString(";")
+
+    private fun getAuthorities(claims: Claims): Collection<GrantedAuthority> =
+            claims[AUTHORITIES_KEY].toString().split(",").map { SimpleGrantedAuthority(it) }
+
+
+    private fun getId(claims: Claims): Long = claims[ID_KEY].toString().toLong()
 }

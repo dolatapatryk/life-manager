@@ -9,14 +9,14 @@ import javax.validation.constraints.Size
 
 @Entity
 @Table(name = TABLE_NAME)
-final class AuthorityEntity {
+final class AuthorityEntity(
+        @Id
+        @Column(name = "name", length = 20)
+        @Size(max = 20)
+        var name: String = ""
+) {
 
     companion object {
         const val TABLE_NAME = "authority"
     }
-
-    @Id
-    @Column(name = "name", length = 20)
-    @Size(max = 20)
-    var name: String = ""
 }

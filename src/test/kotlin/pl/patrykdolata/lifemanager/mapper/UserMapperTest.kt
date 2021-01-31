@@ -64,7 +64,7 @@ class UserMapperTest {
                 Executable { assertThat(result.firstName, equalTo("John")) },
                 Executable { assertThat(result.lastName, equalTo("Doe")) },
                 Executable { assertThat(result.email, equalTo("test@test.com")) },
-                Executable { assertFalse(result.activated) },
+                Executable { assertTrue(result.activated) },
                 Executable { assertThat(result.activationKey, hasLength(UserMapper.KEY_LENGTH)) },
                 Executable { assertThat(result.createdAt.toDouble(), closeTo(Date().time.toDouble(), 60000.0)) }
         )

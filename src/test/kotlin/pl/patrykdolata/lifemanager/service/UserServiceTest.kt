@@ -74,7 +74,7 @@ class UserServiceTest {
         val newUser = createNewUser()
         whenever(userRepository.findOneByEmail(newUser.email)).thenReturn(null)
         whenever(userRepository.findOneByUsername(newUser.username)).thenReturn(null)
-        whenever(userMapper.toEntity(any())).thenReturn(UserEntity())
+        whenever(userMapper.toEntity(any(), eq(false))).thenReturn(UserEntity())
         userService.register(newUser)
         verify(userRepository).save(any())
     }

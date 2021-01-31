@@ -36,7 +36,7 @@ class UserServiceImpl(
         val jwt = tokenProvider.createToken(authentication, loginInfo.rememberMe)
         val user: AuthenticatedUser = authentication.principal as AuthenticatedUser
 
-        return User(user.id, user.username, user.email, user.firstName, user.lastName, jwt)
+        return User(user, jwt)
     }
 
     override fun register(user: NewUser) {

@@ -14,10 +14,10 @@ class AccountController(accountService: AccountService)
     : AbstractCrudController<Account, AccountEntity, Long>(accountService) {
 
     companion object {
-        private val LOGGER: Logger = LoggerFactory.getLogger(AccountController::class.java)
+        private val logger: Logger = LoggerFactory.getLogger(AccountController::class.java)
     }
 
-    override fun getLogger(): Logger = LOGGER
+    override fun getLogger(): Logger = logger
 
     override fun getModelClassName(): String? = Account::class.simpleName
 }

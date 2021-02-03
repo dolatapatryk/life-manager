@@ -1,3 +1,3 @@
 package pl.patrykdolata.lifemanager.model
 
-data class ExpenseCategory(val name: String, val description: String?)
+data class ExpenseCategory(val id: Long?, val name: String, val description: String?)

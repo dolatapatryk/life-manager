@@ -14,10 +14,10 @@ class AccountServiceImpl(accountRepository: AccountRepository, accountMapper: Ac
     : CrudServiceImpl<Account, AccountEntity, Long>(accountRepository, accountMapper), AccountService {
 
     companion object {
-        private val LOGGER: Logger = LoggerFactory.getLogger(AccountServiceImpl::class.java)
+        private val logger: Logger = LoggerFactory.getLogger(AccountServiceImpl::class.java)
     }
 
-    override fun getLogger(): Logger = LOGGER
+    override fun getLogger(): Logger = logger
 
     override fun getModelClassName(): String? = Account::class.simpleName
 }

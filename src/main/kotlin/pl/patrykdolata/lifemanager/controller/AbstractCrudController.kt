@@ -5,13 +5,13 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pl.patrykdolata.lifemanager.model.IdResponse
 import pl.patrykdolata.lifemanager.service.CrudService
-import pl.patrykdolata.lifemanager.util.RequestUtils.createSort
-import pl.patrykdolata.lifemanager.util.RequestUtils.createSortedPageable
-import pl.patrykdolata.lifemanager.util.RequestUtils.createSpecification
 import pl.patrykdolata.lifemanager.util.ResponseUtils.createdResponse
 import pl.patrykdolata.lifemanager.util.ResponseUtils.ok
 import pl.patrykdolata.lifemanager.util.ResponseUtils.pageResponse
 import pl.patrykdolata.lifemanager.util.ResponseUtils.response
+import pl.patrykdolata.lifemanager.util.createSort
+import pl.patrykdolata.lifemanager.util.createSortedPageable
+import pl.patrykdolata.lifemanager.util.createSpecification
 
 abstract class AbstractCrudController<M, E, ID>(private val service: CrudService<M, E, ID>) {
 
@@ -21,10 +21,10 @@ abstract class AbstractCrudController<M, E, ID>(private val service: CrudService
 
     @GetMapping
     fun findAll(
-            @RequestParam(name = "page", required = false) page: Int?,
-            @RequestParam(name = "size", required = false) size: Int?,
-            @RequestParam(name = "search", required = false) search: Array<String>?,
-            @RequestParam(name = "sort", required = false) sort: Array<String>?
+        @RequestParam(name = "page", required = false) page: Int?,
+        @RequestParam(name = "size", required = false) size: Int?,
+        @RequestParam(name = "search", required = false) search: Array<String>?,
+        @RequestParam(name = "sort", required = false) sort: Array<String>?
     ): ResponseEntity<List<M>> {
         getLogger().debug("Request to get user's ${getModelClassName()}s")
         val pageable = createSortedPageable(page, size, sort)

@@ -14,8 +14,8 @@ import java.io.Serializable
 import javax.persistence.EntityNotFoundException
 
 abstract class CrudServiceImpl<M, E : AbstractEntity<ID>, ID : Serializable>(
-        private val repository: CrudSpecificationRepository<E, ID>,
-        private val mapper: EntityMapper<M, E>
+    private val repository: CrudSpecificationRepository<E, ID>,
+    private val mapper: EntityMapper<M, E>
 ) : CrudService<M, E, ID> {
 
     abstract fun getLogger(): Logger

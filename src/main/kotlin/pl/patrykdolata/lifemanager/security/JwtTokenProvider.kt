@@ -62,7 +62,7 @@ class JwtTokenProvider(
         val claims: Claims = getTokenClaims(token)
         val authorities = getAuthorities(claims)
         val id: Long = getId(claims)
-        val principal = AuthenticatedUser(id, claims.subject, "", true, authorities)
+        val principal = AuthenticatedUser(id, claims.subject)
 
         return UsernamePasswordAuthenticationToken(principal, token, authorities)
     }
@@ -89,15 +89,11 @@ class JwtTokenProvider(
 
     private fun getId(authentication: Authentication): Long = (authentication.principal as AuthenticatedUser).id
 
-    private fun getAuthorities(authentication: Authentication): String {
-//        return authentication.authorities.map { it.authority }
-//                .toCollection(Collectors.joining(","))
-        return "ROLE_USER"
-    }
+    private fun getAuthorities(authentication: Authentication) = authentication.authorities.joinToString(";")
 
-    private fun getAuthorities(claims: Claims): Collection<GrantedAuthority> {
-        return claims[AUTHORITIES_KEY].toString().split(",").map { SimpleGrantedAuthority(it) }
-    }
+    private fun getAuthorities(claims: Claims): Collection<GrantedAuthority> =
+            claims[AUTHORITIES_KEY].toString().split(",").map { SimpleGrantedAuthority(it) }
+
 
     private fun getId(claims: Claims): Long = claims[ID_KEY].toString().toLong()
 }

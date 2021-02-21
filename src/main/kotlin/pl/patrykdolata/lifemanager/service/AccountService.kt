@@ -1,7 +1,6 @@
 package pl.patrykdolata.lifemanager.service
 
-import pl.patrykdolata.lifemanager.model.NewAccount
+import pl.patrykdolata.lifemanager.domain.AccountEntity
+import pl.patrykdolata.lifemanager.model.Account
 
-interface AccountService {
-    fun create(account: NewAccount): Long
-}
+interface AccountService : CrudService<Account, AccountEntity, Long>

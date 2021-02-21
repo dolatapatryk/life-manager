@@ -9,4 +9,8 @@ object JsonUtils {
     fun asJsonString(obj: Any?): String? {
         return objectMapper.writeValueAsString(obj)
     }
+
+    fun <T> fromJson(json: String, klazz: Class<T>): T? {
+        return objectMapper.readValue(json, klazz)
+    }
 }

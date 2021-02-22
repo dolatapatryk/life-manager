@@ -11,6 +11,10 @@ object JsonUtils {
     }
 
     fun <T> fromJson(json: String, klazz: Class<T>): T? {
-        return objectMapper.readValue(json, klazz)
+        return try {
+            objectMapper.readValue(json, klazz)
+        } catch (e: Exception) {
+            null
+        }
     }
 }

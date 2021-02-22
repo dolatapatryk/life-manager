@@ -13,7 +13,7 @@ import pl.patrykdolata.lifemanager.model.NewUser
 import pl.patrykdolata.lifemanager.model.User
 import pl.patrykdolata.lifemanager.security.JwtFilter
 import pl.patrykdolata.lifemanager.service.UserService
-import pl.patrykdolata.lifemanager.util.ResponseUtils.ok
+import pl.patrykdolata.lifemanager.util.ok
 
 @RestController
 @RequestMapping("/api/users")

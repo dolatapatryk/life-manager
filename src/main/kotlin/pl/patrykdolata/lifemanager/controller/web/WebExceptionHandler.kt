@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import pl.patrykdolata.lifemanager.exceptions.WebException
 import pl.patrykdolata.lifemanager.model.ErrorResponse
-import pl.patrykdolata.lifemanager.util.ResponseUtils.response
+import pl.patrykdolata.lifemanager.util.response
 import java.util.*
 import javax.persistence.EntityNotFoundException
 import javax.servlet.http.HttpServletRequest
@@ -22,7 +22,7 @@ class WebExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(WebException::class)
     fun handleWebExceptions(ex: WebException, request: HttpServletRequest): ResponseEntity<ErrorResponse> =
-            response(createErrorResponse(ex.message!!, ex.statusCode.value(), request), ex.statusCode)
+            response(createErrorResponse(ex.message, ex.statusCode.value(), request), ex.statusCode)
 
     @ExceptionHandler(EntityNotFoundException::class)
     fun handleEntityNotFoundException(ex: EntityNotFoundException, request: HttpServletRequest)

@@ -5,13 +5,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pl.patrykdolata.lifemanager.model.IdResponse
 import pl.patrykdolata.lifemanager.service.CrudService
-import pl.patrykdolata.lifemanager.util.ResponseUtils.createdResponse
-import pl.patrykdolata.lifemanager.util.ResponseUtils.ok
-import pl.patrykdolata.lifemanager.util.ResponseUtils.pageResponse
-import pl.patrykdolata.lifemanager.util.ResponseUtils.response
-import pl.patrykdolata.lifemanager.util.createSort
-import pl.patrykdolata.lifemanager.util.createSortedPageable
-import pl.patrykdolata.lifemanager.util.createSpecification
+import pl.patrykdolata.lifemanager.util.*
 
 abstract class AbstractCrudController<M, E, ID>(private val service: CrudService<M, E, ID>) {
 
